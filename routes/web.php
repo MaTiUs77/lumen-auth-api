@@ -17,10 +17,10 @@ $router->get('/', function () use ($router) {
 	];
 });
 
-$router->post('/auth/login', 'AuthController@postLogin');
-$router->get('/password', 'AuthController@generatePassword');
+$router->post('/login', 'AuthController@postLogin');
+$router->get('/password/{password}', 'AuthController@generatePassword');
 
-$router->group(['prefix'=>'auth','middleware' => 'auth:api'], function($router)
+$router->group(['middleware' => 'auth:api'], function($router)
 {
 	$router->get('/logout', 'AuthController@logout');
 	$router->get('/refresh', 'AuthController@refresh');

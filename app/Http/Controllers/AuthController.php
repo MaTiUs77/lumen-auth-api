@@ -81,9 +81,9 @@ class AuthController extends Controller
         return response()->json(compact('token'));
     }
 
-    public function generatePassword() {
+    public function generatePassword($password) {
         return [
-            'password' => Hash::make("1234")
+            'hash' => Hash::make($password)
         ];
     }
 
