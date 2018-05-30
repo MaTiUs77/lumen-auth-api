@@ -43,6 +43,10 @@ class User extends Model implements JWTSubject, AuthenticatableContract, Authori
     {
         return [];
     }
+    
+    public function getAuthPassword(){  
+        return $this->api_password;
+    }
 
     function Centro()
     {
