@@ -12,9 +12,23 @@
 */
 
 $router->get('/', function () use ($router) {
-	return [
-		'auth_server'=>'online',
+	$service= 'lumen-auth-api';
+	$status= 'online';
+
+	$motor= app()->version();
+	$api_gateway = env('API_GATEWAY');
+	$server_time = \Carbon\Carbon::now();
+
+	$tag = shell_exec('git describe --always --tags');
+	$path = shell_exec('git remote -v');
+	$path = explode(' ',preg_replace('/origin|\t/','',$path))[0];
+
+	$github = [
+		'url' => $path,
+		'tag' => trim(preg_replace('/\s\s+/', ' ', $tag))
 	];
+
+	return compact('service','status','motor','api_gateway','github','server_time');
 });
 
 $router->post('/login', 'AuthController@postLogin');
