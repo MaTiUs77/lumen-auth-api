@@ -16,7 +16,6 @@ $router->get('/', function () use ($router) {
 	$status= 'online';
 
 	$motor= app()->version();
-	$api_gateway = env('API_GATEWAY');
 	$server_time = \Carbon\Carbon::now();
 
 	$tag = shell_exec('git describe --always --tags');
@@ -28,7 +27,7 @@ $router->get('/', function () use ($router) {
 		'tag' => trim(preg_replace('/\s\s+/', ' ', $tag))
 	];
 
-	return compact('service','status','motor','api_gateway','github','server_time');
+	return compact('service','status','motor','github','server_time');
 });
 
 $router->post('/login', 'AuthController@postLogin');

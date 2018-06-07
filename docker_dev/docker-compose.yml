@@ -25,7 +25,7 @@ services:
         - ..:/application
         - ./phpdocker/php-fpm/php-ini-overrides.ini:/etc/php/7.0/fpm/conf.d/99-overrides.ini
       environment:
-        - DB_HOST=172.17.0.1
+        - DB_HOST=siep-mysql
         - DB_DATABASE=siep
         - DB_USERNAME=siep
         - DB_PASSWORD=siep
