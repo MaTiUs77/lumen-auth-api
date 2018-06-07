@@ -18,7 +18,7 @@ services:
     siep-auth-php:
       restart: always
       build: phpdocker/php-fpm
-      image: lumen:7.1-fpm
+      image: siep_auth:7.1-fpm
       container_name: siep-auth-php
       working_dir: /application
       volumes:
