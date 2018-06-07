@@ -12,6 +12,8 @@ services:
        - "8888:80"
       depends_on:
           - siep-auth-php
+      networks:
+        - siep-lan
 
     siep-auth-php:
       restart: always
@@ -27,3 +29,9 @@ services:
         - DB_DATABASE=siep
         - DB_USERNAME=siep
         - DB_PASSWORD=siep
+      networks:
+        - siep-lan
+
+networks:
+  siep-lan:
+    driver: bridge
