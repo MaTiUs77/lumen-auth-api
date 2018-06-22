@@ -18,5 +18,7 @@ COPY . /var/www/html/
 RUN chmod 777 /var/www/html/storage -R
 RUN composer install
 
+RUN wget https://api.github.com/repos/MaTiUs77/lumen-auth-api/commits/master && mv master /var/www/html/public/master.json
+
 EXPOSE 80 443
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
