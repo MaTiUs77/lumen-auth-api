@@ -32,6 +32,7 @@ class User extends Model implements JWTSubject, AuthenticatableContract, Authori
      */
     protected $hidden = [
         'password',
+        'api_password',
     ];
 
     public function getJWTIdentifier()

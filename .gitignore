@@ -5,3 +5,7 @@ Homestead.yaml
 
 docker_dev/phpdocker/nginx/\.nginx\.conf\.swp
 
+
+supervisord\.log
+
+supervisord\.pid
