@@ -7,10 +7,6 @@ use Laravel\Socialite\Facades\Socialite;
 
 class SocialController extends Controller
 {
-    public function redir()
-    {
-        return url();
-    }
     public function login($provider)
     {
         return Socialite::with($provider)->stateless()->redirect();
@@ -18,6 +14,8 @@ class SocialController extends Controller
 
     public function callback($provider)
     {
+
+
         try {
             $oauth = (object) Socialite::with($provider)->stateless()->user();
             if($oauth)
@@ -40,7 +38,8 @@ class SocialController extends Controller
                     $user_social->save();
                 }
 
-                return compact('user_social','oauth');
+                return $this->redireccionar($user_social->token);
+                //return compact('user_social','oauth');
             } else {
                 return compact('oauth');
             }
@@ -48,5 +47,25 @@ class SocialController extends Controller
         {
             return ['error' => $ex->getMessage()];
         }
+    }
+
+    private function redireccionar($token) {
+        $url = url();
+
+        if (strpos($url, 'siep-produccion') !== false) {
+            $url = 'https://inscribitepor.sieptdf.org';
+        }
+
+        if (strpos($url, 'siep-desarrollo') !== false) {
+            $url = 'https://dev.inscribitepor.sieptdf.org';
+        }
+
+
+        if (strpos($url, 'siep-auth-api') !== false) {
+            $url = 'http://localhost:1337';
+        }
+
+        header("Location: $url?token=$token");
+
     }
 }

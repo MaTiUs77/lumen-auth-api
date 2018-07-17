@@ -40,8 +40,6 @@ $router->get('/', function () use ($router) {
 	return compact('service','status','motor','github','server_time');
 });
 
-$router->get('/redir', 'SocialController@redir');
-
 $router->group(['prefix' => 'social'], function($router)
 {
 	$router->get('/{driver}', 'SocialController@login');
