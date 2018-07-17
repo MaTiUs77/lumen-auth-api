@@ -40,6 +40,12 @@ $router->get('/', function () use ($router) {
 	return compact('service','status','motor','github','server_time');
 });
 
+$router->group(['prefix' => 'social'], function($router)
+{
+	$router->get('/{driver}', 'SocialController@login');
+	$router->get('/{driver}/callback', 'SocialController@callback');
+});
+
 $router->post('/login', 'AuthController@postLogin');
 $router->get('/password/{password}', 'AuthController@generatePassword');
 

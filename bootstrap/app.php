@@ -26,6 +26,10 @@ $app = new Laravel\Lumen\Application(
 $app->withFacades();
 $app->withEloquent();
 
+$app->configure('services');
+class_alias('Laravel\Socialite\Facades\Socialite', 'Socialite');
+
+
 /*
 |--------------------------------------------------------------------------
 | Register Container Bindings
@@ -81,7 +85,10 @@ $app->routeMiddleware([
 $app->register(App\Providers\AppServiceProvider::class);
 $app->register(App\Providers\AuthServiceProvider::class);
 $app->register(App\Providers\EventServiceProvider::class);
+// Custom
 $app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
+$app->register(\Laravel\Socialite\SocialiteServiceProvider::class);
+
 /*
 |--------------------------------------------------------------------------
 | Load The Application Routes
