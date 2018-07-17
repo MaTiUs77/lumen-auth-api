@@ -7,6 +7,10 @@ use Laravel\Socialite\Facades\Socialite;
 
 class SocialController extends Controller
 {
+    public function redir()
+    {
+        return url();
+    }
     public function login($provider)
     {
         return Socialite::with($provider)->stateless()->redirect();
