@@ -11,7 +11,21 @@
 |
 */
 
-$router->get('/', function () use ($router) {
+$router->get('/', function () use ($router) {  
+	try {
+		$git = json_decode(file_get_contents('http://localhost/master.json'));
+
+		$github = [
+			'commit' => substr($git->sha,0,7),
+			'sha' => $git->sha,
+			'message' => $git->commit->message
+		];
+
+	} catch(\Exception $ex) 
+	{
+		$github = ['error'=>'Error al descargar master.json'];
+	}
+
 	$service= 'lumen-auth-api';
 	$status= 'online';
 
@@ -22,12 +36,14 @@ $router->get('/', function () use ($router) {
 	$path = shell_exec('git remote -v');
 	$path = explode(' ',preg_replace('/origin|\t/','',$path))[0];
 
-	$github = [
-		'url' => $path,
-		'tag' => trim(preg_replace('/\s\s+/', ' ', $tag))
-	];
 
 	return compact('service','status','motor','github','server_time');
+});
+
+$router->group(['prefix' => 'social'], function($router)
+{
+	$router->get('/{driver}', 'SocialController@login');
+	$router->get('/{driver}/callback', 'SocialController@callback');
 });
 
 $router->post('/login', 'AuthController@postLogin');

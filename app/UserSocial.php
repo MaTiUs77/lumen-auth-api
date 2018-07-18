@@ -9,11 +9,11 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Model implements JWTSubject, AuthenticatableContract, AuthorizableContract
+class UserSocial extends Model implements JWTSubject, AuthenticatableContract, AuthorizableContract
 {
     use Authenticatable, Authorizable;
 
-    protected $table = 'users';
+    protected $table = 'users_social';
     /**
      * The attributes that are mass assignable.
      *
@@ -23,16 +23,12 @@ class User extends Model implements JWTSubject, AuthenticatableContract, Authori
         'name', 'username',
     ];
 
-    protected $with= 'Centro';
-
     /**
      * The attributes excluded from the model's JSON form.
      *
      * @var array
      */
     protected $hidden = [
-        'password',
-        'api_password',
     ];
 
     public function getJWTIdentifier()
@@ -43,14 +39,5 @@ class User extends Model implements JWTSubject, AuthenticatableContract, Authori
     public function getJWTCustomClaims()
     {
         return [];
-    }
-    
-    public function getAuthPassword(){  
-        return $this->api_password;
-    }
-
-    function Centro()
-    {
-        return $this->hasOne('App\Centros', 'id', 'centro_id');
     }
 }
