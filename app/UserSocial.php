@@ -14,6 +14,9 @@ class UserSocial extends Model implements JWTSubject, AuthenticatableContract, A
     use Authenticatable, Authorizable;
 
     protected $table = 'users_social';
+
+    protected $with= 'Persona.Ciudad';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -28,7 +31,6 @@ class UserSocial extends Model implements JWTSubject, AuthenticatableContract, A
      * @var array
      */
     protected $hidden = [
-        'token'
     ];
 
     public function getJWTIdentifier()
@@ -39,5 +41,10 @@ class UserSocial extends Model implements JWTSubject, AuthenticatableContract, A
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    function Persona()
+    {
+        return $this->hasOne('App\Personas', 'id', 'persona_id');
     }
 }
