@@ -39,6 +39,10 @@ return [
             'driver' => 'jwt',
             'provider' => 'users'
         ],
+        'social' => [
+            'driver' => 'jwt',
+            'provider' => 'social'
+        ],
     ],
 
     /*
@@ -62,6 +66,10 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model'  => \App\User::class,
+        ],
+        'social' => [
+            'driver' => 'eloquent',
+            'model'  => \App\UserSocial::class,
         ],
     ],
 

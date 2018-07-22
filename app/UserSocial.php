@@ -20,7 +20,6 @@ class UserSocial extends Model implements JWTSubject, AuthenticatableContract, A
      * @var array
      */
     protected $fillable = [
-        'name', 'username',
     ];
 
     /**
@@ -29,6 +28,7 @@ class UserSocial extends Model implements JWTSubject, AuthenticatableContract, A
      * @var array
      */
     protected $hidden = [
+        'token'
     ];
 
     public function getJWTIdentifier()
