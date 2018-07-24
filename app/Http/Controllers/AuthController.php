@@ -6,13 +6,11 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Input;
 use Tymon\JWTAuth\JWTAuth;
 
 class AuthController extends Controller
 {
-    /**
-     * @var \Tymon\JWTAuth\JWTAuth
-     */
     protected $jwt;
 
     public function __construct(JWTAuth $jwt)
@@ -20,7 +18,7 @@ class AuthController extends Controller
         $this->jwt = $jwt;
     }
 
-    public function postLogin(Request $request)
+    public function login(Request $request)
     {
         $this->validate($request, [
             'username'    => 'required|string|max:100',
@@ -28,39 +26,25 @@ class AuthController extends Controller
         ]);
 
         try {
-
             $token = $this->jwt->attempt($request->only('username', 'password'));
 
             if ($token) {
                 return response()->json(compact('token'));
             } else {
-                return $this->invalid_credential();
+                return $this->jwt_error(401,'invalid_credentials','Credenciales invalidas');
             }
 
         } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
-
-            $code = 500;
-            $error = 'token_expired';
-            $message  = 'Token expirado';
-            $output = compact('code','error','message');
-            return response()->json($output, $code);
+            return $this->jwt_error(500,'token_expired','Token expirado');
         } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
-            $code = 500;
-            $error = 'token_invalid';
-            $message  = 'Token invalido';
-            $output = compact('code','error','message');
-            return response()->json($output, $code);
+            return $this->jwt_error(500,'token_invalid','Token invalido');
         } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
-            $code = 500;
-            $error = 'token_absent';
-            $message  = $e->getMessage();
-            $output = compact('code','error','message');
-            return response()->json($output, $code);
+            return $this->jwt_error(500,'token_absent',$e->getMessage());
         }
     }
 
     public function me() {
-        $user = Auth::user();
+        $user = Auth::guard('api')->user();
         if($user)
         {
             return response()->json($user);
@@ -81,20 +65,14 @@ class AuthController extends Controller
         return response()->json(compact('token'));
     }
 
-    public function generatePassword($password) {
+    private function generatePassword($password) {
         return [
             'hash' => Hash::make($password)
         ];
     }
 
-    private function invalid_credential()
-    {
-        $code = 401;
-        $error = 'invalid_credentials';
-        $message  = 'Credenciales invalidas';
+    private function jwt_error($code,$error,$message){
         $output = compact('code','error','message');
-
         return response()->json($output, $code);
-
     }
 }

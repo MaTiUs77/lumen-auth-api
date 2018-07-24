@@ -40,8 +40,19 @@ $router->get('/', function () use ($router) {
 	return compact('service','status','motor','github','server_time');
 });
 
-$router->post('/login', 'AuthController@postLogin');
-$router->get('/password/{password}', 'AuthController@generatePassword');
+// LOGIN SOCIAL
+$router->group(['prefix' => 'social'], function($router)
+{
+	$router->group(['middleware' => 'auth:social'], function($router) {
+		$router->get('/me', 'SocialController@me');
+	});
+
+	$router->get('/{driver}', 'SocialController@login');
+	$router->get('/{driver}/callback', 'SocialController@callback');
+});
+
+// LOGIN CON CREDENCIALES
+$router->post('/login', 'AuthController@login');
 
 $router->group(['middleware' => 'auth:api'], function($router)
 {
@@ -49,3 +60,5 @@ $router->group(['middleware' => 'auth:api'], function($router)
 	$router->get('/refresh', 'AuthController@refresh');
 	$router->get('/me', 'AuthController@me');
 });
+
+
