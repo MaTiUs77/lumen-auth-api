@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\UserSocial;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Input;
 use Laravel\Socialite\Facades\Socialite;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -12,18 +13,31 @@ class SocialController extends Controller
 {
     public function login($provider)
     {
-        return Socialite::with($provider)->stateless()->redirect();
+        // Enviamos a oauth el nombre del app
+        $app = Input::get('app');
+
+        return Socialite::with($provider)
+            ->stateless()
+            ->with(['state'=>$app])
+            ->redirect();
     }
 
     public function callback($provider)
     {
+        // Nombre del App retornado desde oauth
+        $app = Input::get('state');
+
         try {
-            $oauth = (object) Socialite::with($provider)->stateless()->user();
+            $oauth = (object) Socialite::with($provider)
+                ->stateless()
+                ->user();
+
             $jwt = null;
             if($oauth)
             {
                 $user_social = UserSocial::where('provider',$provider)
-                    ->where('provider_id',$oauth->id)->first();
+                    ->where('provider_id',$oauth->id)
+                    ->first();
 
                 if($user_social) {
                     // En caso de existir, loguea al usuario con JWT y retorna el token
@@ -42,7 +56,7 @@ class SocialController extends Controller
                 }
 
                 $token = $jwt['token'];
-                return $this->redireccionar($token);
+                return $this->redireccionar($token,$app);
                 //return compact('jwt','token');
             } else {
                 return compact('oauth');
@@ -91,19 +105,54 @@ class SocialController extends Controller
         }
     }
 
-    private function redireccionar($token) {
+    public function logout() {
+        Auth::logout();
+        return response()->json(['message' => 'Sesion finalizada']);
+    }
+
+    public function refresh()
+    {
+        $token = Auth::refresh();
+        return response()->json(compact('token'));
+    }
+
+    private function redireccionar($token,$app) {
         $url = url();
 
         if (strpos($url, 'siep-produccion') !== false) {
-            $url = 'https://inscribitepor.sieptdf.org';
+            switch($app)
+            {
+                case 'siep-pwa':
+                    $url = 'https://inscribitepor.sieptdf.org';
+                    break;
+                case 'siep-admin':
+                    $url = 'https://admin.sieptdf.org';
+                    break;
+            }
         }
 
         if (strpos($url, 'siep-desarrollo') !== false) {
-            $url = 'https://dev.inscribitepor.sieptdf.org';
+            switch($app)
+            {
+                case 'siep-pwa':
+                    $url = 'https://dev.inscribitepor.sieptdf.org';
+                    break;
+                case 'siep-admin':
+                    $url = 'https://dev.admin.sieptdf.org';
+                    break;
+            }
         }
         
         if (strpos($url, 'siep-auth-api') !== false) {
-            $url = 'http://localhost:1337';
+            switch($app)
+            {
+                case 'siep-pwa':
+                    $url = 'http://localhost:1337';
+                    break;
+                case 'siep-admin':
+                    $url = 'http://localhost:1338';
+                    break;
+            }
         }
 
         header("Location: $url?token=$token");
