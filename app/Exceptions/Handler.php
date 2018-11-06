@@ -45,11 +45,10 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
-/*        $error = "Error interno, el motivo fue logueado y los administradores del sistema lo verificarán en la brevedad";
-        $code = 500;
-
-        $output = compact('error','code');*/
-        //return response()->json($output);
-        return parent::render($request, $e);
+        return response()->json([
+            'error' => $e->getMessage(),
+            'code' => $e->getStatusCode()
+        ],$e->getStatusCode());
+        //return parent::render($request, $e);
     }
 }

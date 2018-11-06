@@ -33,8 +33,18 @@ class User extends Model implements JWTSubject, AuthenticatableContract, Authori
      */
     protected $hidden = [
         'password',
-        'api_password',
+        'api_password'
     ];
+
+    protected $appends = ['acl'];
+
+    public function getAclAttribute()
+    {
+        $roles =  $this->roles->pluck('name');
+        $permisos =  $this->getPermissionsViaRoles()->pluck('name');
+
+        return compact('roles','permisos');
+    }
 
     public function getJWTIdentifier()
     {

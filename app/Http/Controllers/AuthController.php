@@ -48,9 +48,6 @@ class AuthController extends Controller
         if($user)
         {
             return response()->json($user);
-        } else
-        {
-            return $this->invalid_credential();
         }
     }
 
