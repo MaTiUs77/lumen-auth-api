@@ -21,8 +21,8 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $this->validate($request, [
-            'username'    => 'required|string|max:100',
-            'password' => 'required',
+            'username' => 'required',
+            'password' => 'required'
         ]);
 
         try {
@@ -62,7 +62,8 @@ class AuthController extends Controller
         return response()->json(compact('token'));
     }
 
-    private function generatePassword($password) {
+    public function generateHash() {
+        $password = Input::get('password');
         return [
             'hash' => Hash::make($password)
         ];
