@@ -7,11 +7,12 @@ use Laravel\Lumen\Auth\Authorizable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
+use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Model implements JWTSubject, AuthenticatableContract, AuthorizableContract
 {
-    use Authenticatable, Authorizable;
+    use Authenticatable, Authorizable, HasRoles;
 
     protected $table = 'users';
     /**
@@ -23,7 +24,7 @@ class User extends Model implements JWTSubject, AuthenticatableContract, Authori
         'name', 'username',
     ];
 
-    protected $with= 'Centro';
+    protected $with= ['Centro','Roles.Permissions'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -32,8 +33,18 @@ class User extends Model implements JWTSubject, AuthenticatableContract, Authori
      */
     protected $hidden = [
         'password',
-        'api_password',
+        'api_password'
     ];
+
+    protected $appends = ['acl'];
+
+    public function getAclAttribute()
+    {
+        $roles =  $this->roles->pluck('name');
+        $permisos =  $this->getPermissionsViaRoles()->pluck('name');
+
+        return compact('roles','permisos');
+    }
 
     public function getJWTIdentifier()
     {

@@ -14,13 +14,15 @@ class UserSocial extends Model implements JWTSubject, AuthenticatableContract, A
     use Authenticatable, Authorizable;
 
     protected $table = 'users_social';
+
+    protected $with= 'Persona.Ciudad';
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'username',
     ];
 
     /**
@@ -39,5 +41,10 @@ class UserSocial extends Model implements JWTSubject, AuthenticatableContract, A
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    function Persona()
+    {
+        return $this->hasOne('App\Personas', 'id', 'persona_id');
     }
 }

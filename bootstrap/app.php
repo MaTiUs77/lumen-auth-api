@@ -29,7 +29,6 @@ $app->withEloquent();
 $app->configure('services');
 class_alias('Laravel\Socialite\Facades\Socialite', 'Socialite');
 
-
 /*
 |--------------------------------------------------------------------------
 | Register Container Bindings
@@ -67,9 +66,13 @@ $app->middleware([
 ]);
 
 $app->routeMiddleware([
-    'auth' => App\Http\Middleware\Authenticate::class,
+    'auth'       => App\Http\Middleware\Authenticate::class,
+    'permission' => Spatie\Permission\Middlewares\PermissionMiddleware::class,
+    'role'       => Spatie\Permission\Middlewares\RoleMiddleware::class,
 ]);
 
+$app->configure('permission');
+$app->register(Spatie\Permission\PermissionServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------
