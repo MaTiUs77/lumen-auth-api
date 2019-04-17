@@ -118,12 +118,14 @@ class SocialController extends Controller
 
     private function redireccionar($token,$app) {
         $url = url();
+        $habilitado = false;
 
         if (strpos($url, 'siep-produccion') !== false) {
+            $habilitado = true;
             switch($app)
             {
                 case 'siep-pwa':
-                    $url = 'https://inscribitepor.sieptdf.org';
+                    $url = 'https://familiares.sieptdf.org';
                     break;
                 case 'siep-admin':
                     $url = 'https://admin.sieptdf.org';
@@ -132,10 +134,11 @@ class SocialController extends Controller
         }
 
         if (strpos($url, 'siep-desarrollo') !== false) {
+            $habilitado = true;
             switch($app)
             {
                 case 'siep-pwa':
-                    $url = 'https://dev.inscribitepor.sieptdf.org';
+                    $url = 'https://dev.familiares.sieptdf.org';
                     break;
                 case 'siep-admin':
                     $url = 'https://dev.admin.sieptdf.org';
@@ -144,6 +147,7 @@ class SocialController extends Controller
         }
         
         if (strpos($url, 'siep-auth-api') !== false) {
+            $habilitado = true;
             switch($app)
             {
                 case 'siep-pwa':
@@ -155,7 +159,17 @@ class SocialController extends Controller
             }
         }
 
-        header("Location: $url?token=$token");
+        if($habilitado) {
+            header("Location: $url?token=$token");
+        }
+
+        $error = [
+            'mensaje' => 'No fue posible redireccionar la peticion',
+            'url' => $url,
+            'app' => $app,
+        ];
+
+        return compact('error');
     }
 
     private function jwt_error($code,$error,$message){
