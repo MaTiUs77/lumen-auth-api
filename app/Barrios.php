@@ -2,18 +2,16 @@
 
 namespace App;
 
+use App\Traits\CustomPaginationScope;
+use App\Traits\WithOnDemandTrait;
 use Illuminate\Database\Eloquent\Model;
 
-class Personas extends Model
+class Barrios extends Model
 {
-    protected $table = 'personas';
+    protected $table = 'barrios';
 
     function Ciudad()
     {
         return $this->hasOne('App\Ciudad', 'id', 'ciudad_id');
-    }
-    function Barrio()
-    {
-        return $this->hasOne('App\Barrios', 'id', 'barrio_id');
     }
 }
