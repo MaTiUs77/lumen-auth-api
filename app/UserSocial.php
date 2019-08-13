@@ -15,7 +15,7 @@ class UserSocial extends Model implements JWTSubject, AuthenticatableContract, A
 
     protected $table = 'users_social';
 
-    protected $with= ['Persona.Ciudad','Persona.Barrio'];
+    protected $with= ['Persona.Ciudad','Persona.Barrio','Persona.Familiares'];
 
     /**
      * The attributes that are mass assignable.
