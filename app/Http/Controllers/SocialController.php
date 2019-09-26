@@ -125,7 +125,7 @@ class SocialController extends Controller
             switch($app)
             {
                 case 'siep-pwa':
-                    $url = 'https://inscribitepor.sieptdf.org';
+                    $url = 'https://familiares.sieptdf.org';
                     break;
                 case 'siep-admin':
                     $url = 'https://admin.sieptdf.org';
@@ -138,7 +138,7 @@ class SocialController extends Controller
             switch($app)
             {
                 case 'siep-pwa':
-                    $url = 'https://dev.inscribitepor.sieptdf.org';
+                    $url = 'https://dev.familiares.sieptdf.org';
                     break;
                 case 'siep-admin':
                     $url = 'https://dev.admin.sieptdf.org';

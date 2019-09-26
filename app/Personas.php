@@ -12,4 +12,12 @@ class Personas extends Model
     {
         return $this->hasOne('App\Ciudad', 'id', 'ciudad_id');
     }
+    function Barrio()
+    {
+        return $this->hasOne('App\Barrios', 'id', 'barrio_id');
+    }
+    function Familiares()
+    {
+        return $this->hasOne('App\Familiares', 'persona_id', 'id');
+    }
 }
