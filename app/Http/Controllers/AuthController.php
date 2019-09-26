@@ -48,6 +48,9 @@ class AuthController extends Controller
         if($user)
         {
             return response()->json($user);
+        } else
+        {
+            return $this->jwt_error(401,'token_invalid','Token invalido');
         }
     }
 
