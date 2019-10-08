@@ -64,7 +64,7 @@ $router->group(['middleware' => 'auth:api'], function($router)
 // ACL ADMIN , GESTION SOLO POR ROL:SUPERADMIN
 // El permiso "gestion_acl" deberia ingresar a esta ruta
 $router->get('/pwd', 'AuthController@generateHash');
-$router->group(['prefix' => 'acl','middleware' => ['auth:api','role:superadmin']], function($router)
+$router->group(['prefix' => 'acl','middleware' => ['auth:api']], function($router)
 {
 	$router->get('/hash', 'AuthController@generateHash');
 

@@ -17,15 +17,15 @@ class PermissionCrud extends Controller
 
     public function add() {
         $name = Input::get('name');
-        $role = Permission::create(['name' => $name]);
-        return $role;
+        $item = Permission::create(['name' => $name]);
+        return $item;
     }
 
     public function delete() {
-        $name = Input::get('name');
-        $role = Permission::findByName($name);
-        $role->delete();
-        return $role;
+        $id = Input::get('id');
+        $item = Permission::findById($id);
+        $item->delete();
+        return $item;
     }
 
 }

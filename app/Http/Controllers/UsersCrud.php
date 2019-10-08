@@ -9,10 +9,18 @@ use Spatie\Permission\Models\Permission;
 class UsersCrud extends Controller
 {
     public function all() {
-        return User::paginate();
+        $find = Input::get('find');
+        if(empty($find)) {
+            $users = User::paginate();
+        } else {
+            $users = User::where('username',$find)
+                ->orWhere('role',$find)
+                ->paginate();
+        }
+        return $users;
     }
 
-    public function show(User $id) {
+    public function show($id) {
         return User::findOrFail($id);
     }
 

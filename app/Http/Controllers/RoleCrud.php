@@ -23,10 +23,10 @@ class RoleCrud extends Controller
     }
 
     public function delete() {
-        $name = Input::get('name');
-        $role = Role::findByName($name);
-        $role->delete();
-        return $role;
+        $id = Input::get('id');
+        $item = Role::findById($id);
+        $item->delete();
+        return $item;
     }
 
     public function view($name) {
