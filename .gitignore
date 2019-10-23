@@ -9,3 +9,5 @@ docker_dev/phpdocker/nginx/\.nginx\.conf\.swp
 supervisord\.log
 
 supervisord\.pid
+
+docker/phpdocker/nginx/\.nginx\.conf\.swp
